@@ -33,7 +33,8 @@ RUN cd /work/outer-loop-app/target/liberty/wlp/usr/servers && \
     if [ -d ../shared ]; then mv ../shared/* /work/shared/; fi
 
 # Step 2: Package Open Liberty image
-FROM openliberty/open-liberty:21.0.0.4-kernel-slim-java11-openj9-ubi
+#FROM openliberty/open-liberty:21.0.0.4-kernel-slim-java11-openj9-ubi
+FROM openliberty/open-liberty:21.0.0.4-full-java11-openj9-ubi
 
 # 2a) Copy user defined shared resources 
 COPY --from=compile --chown=1001:0 /work/shared /opt/ol/wlp/usr/shared/
@@ -47,8 +48,8 @@ COPY --from=compile --chown=1001:0 /work/config/ /config/
 
 # I need to run this to have the server features specified in server.xml be installed
 # it fails immediately, unable to find any features to install
-ENV VERBOSE=true
-RUN features.sh
+#ENV VERBOSE=true
+#RUN features.sh
 
 # 2d) Add the microprofile health feature configuration if it is not already defined in the user's configuration.
 #     This allows k8s to use the deployment's health probes.

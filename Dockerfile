@@ -66,7 +66,7 @@ RUN if [ "$ADD_MP_HEALTH" = "true" ]; then \
         else \
             echo "Found mpHealth feature - not adding config snippet"; \
         fi; \
-        rm -f /logs/*; \
+        rm -rf /logs/*; \
     elif [ "$ADD_MP_HEALTH" != "false" ]; then \
         echo "Invalid ADD_MP_HEALTH value: $ADD_MP_HEALTH. Valid values are \"true\" | \"false\" "; \
     fi
@@ -88,6 +88,10 @@ RUN yum install -y python3
 
 RUN mkdir -p /scripts
 COPY --from=compile --chown=1001:0 /work/scripts /scripts
+
+RUN mkdir -p /batchprops
+COPY --from=compile --chown=1001:0 /work/outer-loop-app/batchprops /batchprops
+
 USER 1001
 RUN python3
 

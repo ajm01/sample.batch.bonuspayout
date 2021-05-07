@@ -21,12 +21,12 @@ def readlines_then_tail(fin, searchStr):
     print("Iterate through lines and then tail for further lines.")
     while True:
         line = fin.readline()
-        print("AJM: line -> " + line)
+#        print("AJM: line -> " + line)
         if searchStr in line:
-            print("AJM: yield line -> ")
+#            print("AJM: yield line -> ")
             yield line
         else:
-            print("AJM: tail line ->")
+#            print("AJM: tail line ->")
             tail(fin)
 
 def tail(fin):
@@ -52,16 +52,36 @@ def searchLogForString(messageID):
             if line.find(messageID):
                 print("cancel timer")
                 timer.cancel()
-                print ("AJM: found it in logline? -> " + line)
+#                print ("AJM: found it in logline? -> " + line)
                 print ("Liberty Server is started ... will now stop it")
                 fin.close()
                 break
 
 def submitBatchJob():
-    subprocess.run(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=BonusPayout', '--jobXMLName=BonusPayoutJob', '--wait'])
+    hostname =os.environ['POSTGRES_HOSTNAME']
+    print(f'hostname is {hostname}')
+    #subprocess.run(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'])
+    process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--jobPropertiesFile=/batchprops/forceFailureParms.txt', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'],
+                               stderr=subprocess.PIPE, 
+                               stdout=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    exit_code = process.wait()
+    print(stdout, stderr, exit_code)
+    return exit_code
 
 startServer()
 searchLogForString("CWWKF0011I")
 #searchLogForString("CWPKI0803A")
-submitBatchJob()
+print("AJM: gonna submit the batch job")
+rc = submitBatchJob()
+print ("AJM: return code from batchJob =  ", rc)
+if (rc == 35):
+    print("AJM: Batch job submission completed successfully...shutting down server and exiting")
+else:
+    print("AJM: Batch Job submission not successful - RC = ", rc)
+    print("AJM: consider restarting job")
+#subprocess.run(['cat', '/logs/messages.log'])
+#while True:
+#    time.sleep(10 * 60)
+
 stopServer()

@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+ name: batch
+spec:
+ template:
+   metadata:
+     name: batch
+   spec:
+     containers:
+     - name: batch
+       image: ajymau/bonuspayout:dev-last 
+       envFrom:
+       - secretRef:
+           name: bp-database-secret
+       imagePullPolicy: Always 
+       command:
+       - /bin/sh
+       - -c
+       - python3 /scripts/batchframework.py
+     restartPolicy: OnFailure

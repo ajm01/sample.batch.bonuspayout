@@ -66,14 +66,14 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
         <liberty.var.a1>true</liberty.var.a1>
-        <liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME>
+		<!--
+        <liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME> 
         <liberty.defaultVar.POSTGRES_PORT>5432</liberty.defaultVar.POSTGRES_PORT>
-        <liberty.defaultVar.POSTGRES_USER>test</liberty.defaultVar.POSTGRES_USER>
-        <liberty.defaultVar.POSTGRES_PASSWORD>test</liberty.defaultVar.POSTGRES_PASSWORD>
-        <liberty.defaultVar.POSTGRES_DB>mydb</liberty.defaultVar.POSTGRES_DB>
-<!--  needed for devc
-        <liberty.defaultVar.POSTGRES_HOSTNAME>172.17.0.2</liberty.defaultVar.POSTGRES_HOSTNAME>
--->
+        <liberty.defaultVar.POSTGRES_USER>sampleuser</liberty.defaultVar.POSTGRES_USER>
+        <liberty.defaultVar.POSTGRES_PASSWORD>samplepwd</liberty.defaultVar.POSTGRES_PASSWORD>
+		<liberty.defaultVar.POSTGRES_DB>sampledb</liberty.defaultVar.POSTGRES_DB> -->
+<!--  needed for devc 
+<liberty.defaultVar.POSTGRES_HOSTNAME>10.254.23.7</liberty.defaultVar.POSTGRES_HOSTNAME> -->
 		<!-- 
 		<maven.surefire.debug>true</maven.surefire.debug>
         <maven.failsafe.debug>true</maven.failsafe.debug> 
@@ -90,7 +90,7 @@
 				<activeByDefault>false</activeByDefault>
 				<property>
 					<name>wlpInstallDir</name>
-				</property>
+				</property>	
 			</activation>
 			<properties>
 				<wlp.install.dir>${wlpInstallDir}</wlp.install.dir>

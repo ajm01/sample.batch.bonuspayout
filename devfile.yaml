@@ -1,10 +1,26 @@
+# Copyright (c) 2021 IBM Corporation and others
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 schemaVersion: 2.0.0
 metadata:
-  name: bp2-stack
-  version: 0.4.1
+  name: java-openliberty
+  version: 0.5.0
   description: Java application stack using Open Liberty runtime
-  alpha.build-dockerfile: "https://github.com/OpenLiberty/application-stack/releases/download/outer-loop-0.5.0/Dockerfile"
-  alpha.deployment-manifest: "https://raw.githubusercontent.com/scottkurz/sample.batch.bonuspayout/devfile/app-deploy.yaml"
+  alpha.build-dockerfile: "https://github.com/OpenLiberty/application-stack/releases/download/outer-loop-0.5.1/Dockerfile"
+  alpha.deployment-manifest: "https://github.com/OpenLiberty/application-stack/releases/download/outer-loop-0.5.1/app-deploy.yaml"
 starterProjects:
   - name: user-app
     git:
@@ -14,7 +30,7 @@ components:
   - name: devruntime
     container:
         # In the original upstream of this devfile, the image used is openliberty/application-stack:<x.y.z>, which is built from the repository: https://github.com/OpenLiberty/application-stack
-      image: openliberty/application-stack:0.4
+      image: openliberty/application-stack:0.5
       memoryLimit: 1512Mi
       mountSources: true
       endpoints:
@@ -27,19 +43,7 @@ commands:
   - id: build
     exec:  
       component: devruntime 
-      commandLine: if [ -e /projects/.disable-bld-cmd ];
-                   then
-                       echo "found the disable file" && echo "devBuild command will not run" && exit 0;
-                   else
-                       echo "will run the devBuild command" && mkdir -p /projects/target/liberty
-                                                            && if [ ! -d /projects/target/liberty/wlp ];
-                                                                 then echo "...moving liberty"; mv /opt/ol/wlp /projects/target/liberty; touch ./.liberty-mv;
-                                                               elif [[ -d /projects/target/liberty/wlp && ! -e /projects/.liberty-mv ]];
-                                                                 then echo "STACK WARNING - LIBERTY RUNTIME WAS LOADED FROM HOST";
-                                                               fi
-                                                            && mvn -Dliberty.runtime.version=20.0.0.12 package
-                                                            && touch ./.disable-bld-cmd;
-                   fi
+      commandLine: /stack/ol/scripts/devbuild-cmd.sh 21.0.0.3
       workingDir: /projects
       hotReloadCapable: true
       group:
@@ -48,7 +52,7 @@ commands:
   - id: run
     exec:
       component: devruntime 
-      commandLine: mvn -Dliberty.runtime.version=20.0.0.12 -Ddebug=false -DhotTests=true -DcompileWait=3 liberty:dev
+      commandLine: mvn -Dliberty.runtime.version=21.0.0.3 -Ddebug=false -DhotTests=true -DcompileWait=3 liberty:dev
       workingDir: /projects
       hotReloadCapable: true
       group:
@@ -57,7 +61,7 @@ commands:
   - id: run-test-off
     exec:
       component: devruntime
-      commandLine: mvn -Dliberty.runtime.version=20.0.0.12 -Ddebug=false liberty:dev
+      commandLine: mvn -Dliberty.runtime.version=21.0.0.3 -Ddebug=false liberty:dev
       workingDir: /projects
       hotReloadCapable: true
       group:
@@ -66,7 +70,7 @@ commands:
   - id: debug
     exec:
       component: devruntime 
-      commandLine: mvn -Dliberty.runtime.version=20.0.0.12 -DdebugPort=${DEBUG_PORT} liberty:dev -Dliberty.env.WLP_DEBUG_REMOTE=y
+      commandLine: mvn -Dliberty.runtime.version=21.0.0.3 -DdebugPort=${DEBUG_PORT} liberty:dev -Dliberty.env.WLP_DEBUG_REMOTE=y
       workingDir: /projects
       hotReloadCapable: true
       group:

@@ -120,13 +120,13 @@ data:
 
 Copy this yaml document and use it to create a secret via the Admin Console
 
-# Run the cronjob
+# Run the Job
 
-The cronjon yaml file has been configured to reference the secret which makes the values avaialble to the pod environment that runs the batch job. In this manner the batch container will be able to connect to the database.
+The batch job yaml file has been configured to reference the secret which makes the values avaialble to the pod environment that runs the batch job. In this manner the batch container will be able to connect to the database.
 
-### Submit the cronjob itself:
+### Submit the Job itself:
 ```shell
-kubectl create -f ./batchcronjob.yaml
+kubectl create -f ./batchjob.yaml
 ```
 
 This will pull the latest image containing the bonuspayout app and the script that will start the server, submit the job and then stop the server. The cronjob itself will run the script.

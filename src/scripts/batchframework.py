@@ -77,11 +77,11 @@ rc = submitBatchJob()
 print ("AJM: return code from batchJob =  ", rc)
 if (rc == 35):
     print("AJM: Batch job submission completed successfully...shutting down server and exiting")
+    stopServer()
+    # we want the script to exit with success, reflecting the batch job being successful, no need to set a rc here.
 else:
-    print("AJM: Batch Job submission not successful - RC = ", rc)
+    #print("AJM: Batch Job submission not successful - RC = ", rc)
+    print("AJM: shutting down server, exiting abnormally with rc! = ", rc)
     print("AJM: consider restarting job")
-#subprocess.run(['cat', '/logs/messages.log'])
-#while True:
-#    time.sleep(10 * 60)
-
-stopServer()
+    stopServer()
+    sys.exit(rc)

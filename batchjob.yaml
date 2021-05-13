@@ -3,6 +3,7 @@ kind: Job
 metadata:
  name: batch
 spec:
+ backoffLimit: 0
  template:
    metadata:
      name: batch
@@ -18,4 +19,4 @@ spec:
        - /bin/sh
        - -c
        - python3 /scripts/batchframework.py
-     restartPolicy: OnFailure
+     restartPolicy: Never

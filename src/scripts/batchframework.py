@@ -61,9 +61,16 @@ def submitBatchJob():
     hostname =os.environ['POSTGRES_HOSTNAME']
     print(f'hostname is {hostname}')
     #subprocess.run(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'])
+
+    # failure batch submission - need to parameterize this
     process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--jobPropertiesFile=/batchprops/forceFailureParms.txt', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'],
                                stderr=subprocess.PIPE, 
                                stdout=subprocess.PIPE)
+
+    # successful batch submission - need to parameterize this
+    #process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'],
+    #                           stderr=subprocess.PIPE, 
+    #                           stdout=subprocess.PIPE)
     stdout, stderr = process.communicate()
     exit_code = process.wait()
     print(stdout, stderr, exit_code)

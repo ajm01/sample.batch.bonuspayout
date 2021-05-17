@@ -1,0 +1,7 @@
+FROM python:3.8-slim 
+
+RUN mkdir -p /scripts
+COPY --chown=1001:0 ./src/scripts /scripts
+
+#USER 1001
+RUN python3

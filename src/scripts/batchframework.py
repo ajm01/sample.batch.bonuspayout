@@ -43,7 +43,7 @@ def tail(fin):
 
 def searchLogForString(messageID):
     print("Searching log for messageID: " + messageID)
-    with open('/logs/messages.log', 'r') as fin:
+    with open('/usr/share/serverlogs/messages.log', 'r') as fin:
         print("setting timer")
         timer = threading.Timer(.01, timedOut)
         timer.start()
@@ -76,7 +76,7 @@ def submitBatchJob():
     print(stdout, stderr, exit_code)
     return exit_code
 
-startServer()
+#startServer()
 searchLogForString("CWWKF0011I")
 #searchLogForString("CWPKI0803A")
 print("AJM: gonna submit the batch job")
@@ -84,11 +84,11 @@ rc = submitBatchJob()
 print ("AJM: return code from batchJob =  ", rc)
 if (rc == 35):
     print("AJM: Batch job submission completed successfully...shutting down server and exiting")
-    stopServer()
+#    stopServer()
     # we want the script to exit with success, reflecting the batch job being successful, no need to set a rc here.
 else:
     #print("AJM: Batch Job submission not successful - RC = ", rc)
     print("AJM: shutting down server, exiting abnormally with rc! = ", rc)
     print("AJM: consider restarting job")
-    stopServer()
+#    stopServer()
     sys.exit(rc)

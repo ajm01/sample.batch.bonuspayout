@@ -4,7 +4,6 @@ FROM openliberty/application-stack:0.4 as compile
 # Make a well known place for shared library jars separate from the rest of the <server> contents (to help with caching)
 RUN mkdir /work/configlibdir \
    && mkdir /work/config \
-   && mkdir /work/scripts \
    &&  mkdir /work/shared
 
 # Copy the rest of the application source
@@ -12,7 +11,6 @@ COPY --chown=1001:0 ./src /work/outer-loop-app/src
 COPY --chown=1001:0 ./ddls/ /work/outer-loop-app/ddls
 COPY --chown=1001:0 ./batchprops/ /work/outer-loop-app/batchprops
 COPY --chown=1001:0 ./pom.xml /work/outer-loop-app/pom.xml
-COPY --chown=1001:0 ./src/scripts /work/scripts
 
 # Build (and run unit tests) 
 #  also liberty:create copies config from src->target
@@ -81,18 +79,7 @@ ENV OPENJ9_SCC=true
 RUN configure.sh && \
     chmod 664 /opt/ol/wlp/usr/servers/*/configDropins/defaults/keystore.xml
 
-#finally, install python for batch mgmt work
-USER root
-RUN yum update -y
-RUN yum install -y python3
-
-RUN mkdir -p /scripts
-COPY --from=compile --chown=1001:0 /work/scripts /scripts
-
-RUN mkdir -p /batchprops
-COPY --from=compile --chown=1001:0 /work/outer-loop-app/batchprops /batchprops
-
-USER 1001
-RUN python3
+RUN mkdir -p /config/batchprops
+COPY --from=compile --chown=1001:0 /work/outer-loop-app/batchprops /config/batchprops
 
 RUN rm -rf /logs/*.*

@@ -8,13 +8,29 @@ spec:
    metadata:
      name: batch
    spec:
+     volumes:
+     - name: logs
+       emptyDir: {}
      containers:
-     - name: batch
+     - name: bonuspayout
+       volumeMounts:
+       - name: logs
+         mountPath: /logs
        image: ajymau/bonuspayout:dev-last 
        envFrom:
        - secretRef:
            name: bp-database-secret
        imagePullPolicy: Always 
+       command:
+       - /bin/sh
+       - -c
+       - /opt/ol/wlp/bin/server start 
+     - name: batchmgr
+       volumeMounts:
+       - name: var-logs
+         mountPath: /usr/share/serverlogs
+       image: ajymau/batchdriver:dev-last
+       imagePullPolicy: Always
        command:
        - /bin/sh
        - -c

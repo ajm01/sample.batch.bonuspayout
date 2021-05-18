@@ -120,6 +120,11 @@ data:
 
 Copy this yaml document and use it to create a secret via the Admin Console
 
+or, from the command line:
+```shell
+kubectl apply -f ./dbsecret.yaml
+```
+
 # Run the Job
 
 The batch job yaml file has been configured to reference the secret which makes the values avaialble to the pod environment that runs the batch job. In this manner the batch container will be able to connect to the database.
@@ -129,4 +134,4 @@ The batch job yaml file has been configured to reference the secret which makes 
 kubectl create -f ./batchjob.yaml
 ```
 
-This will pull the latest image containing the bonuspayout app and the script that will start the server, submit the job and then stop the server. The cronjob itself will run the script.
+This will pull the latest image containing the bonuspayout app and the script that will start the server, submit the job and then stop the server. The Job itself will run the script.

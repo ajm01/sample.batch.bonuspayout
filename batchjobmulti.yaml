@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+ name: batch
+spec:
+ backoffLimit: 0
+ template:
+   metadata:
+     name: batch
+   spec:
+     volumes:
+     - name: logs
+       emptyDir: {}
+     containers:
+     - name: bonuspayout
+       volumeMounts:
+       - name: logs
+         mountPath: /tmp/logs
+       image: ajymau/bonuspayout:dev-last
+       envFrom:
+       - secretRef:
+           name: bp-database-secret
+       imagePullPolicy: Always
+       command:
+       - /bin/sh
+       - -c
+       - ln -s /logs /tmp/logs;/opt/ol/wlp/bin/server start; tail /logs/messages.log
+     - name: batchmgr
+       volumeMounts:
+       - name: logs
+         mountPath: /tmp/logs
+       image: ajymau/batchdriver:dev-last
+       imagePullPolicy: Always
+       command:
+       - /bin/sh
+       - -c
+       - python3 /scripts/batchframework.py
+     dnsPolicy: ClusterFirst
+     restartPolicy: Never
+

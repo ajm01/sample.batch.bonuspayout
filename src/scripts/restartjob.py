@@ -1,7 +1,7 @@
 import subprocess
 import time
 import threading
-import sys, os
+import sys, os, getopt
 
 def timedOut():
     print("Did not find the liberty server start success message in the alloted time...exiting")
@@ -43,12 +43,7 @@ def tail(fin):
 
 def searchLogForString(messageID):
     print("Searching log for messageID: " + messageID)
-    subprocess.run(['ls', '-l', '/tmp/logs/'])
-    print("AJM: doing a find")
-    subprocess.run(['find', '/tmp/logs', '-name', '"*.*"'])
-    print("AJM: done...")
-    time.sleep(600)
-    with open('/tmp/logs/messages.log', 'r') as fin:
+    with open('/logs/messages.log', 'r') as fin:
         print("setting timer")
         timer = threading.Timer(.01, timedOut)
         timer.start()
@@ -62,13 +57,14 @@ def searchLogForString(messageID):
                 fin.close()
                 break
 
-def submitBatchJob():
+def restartBatchJob(jobid):
     hostname =os.environ['POSTGRES_HOSTNAME']
     print(f'hostname is {hostname}')
     #subprocess.run(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'])
 
     # failure batch submission - need to parameterize this
-    process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--jobPropertiesFile=/batchprops/forceFailureParms.txt', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'],
+	#'--jobPropertiesFile=/batchprops/forceFailureParms.txt'
+    process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'restart', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--jobInstanceId={}'.format(jobid), '--pollingInterval_s=2', '--wait'],
                                stderr=subprocess.PIPE, 
                                stdout=subprocess.PIPE)
 
@@ -81,19 +77,36 @@ def submitBatchJob():
     print(stdout, stderr, exit_code)
     return exit_code
 
-#startServer()
+jobid = 0
+# total arguments
+n = len(sys.argv)
+print("Total arguments passed:", n)
+ 
+# Arguments passed
+print("\nName of Python script:", sys.argv[0])
+ 
+print("\nArguments passed:", end = " ")
+for i in range(1, n):
+    print(sys.argv[i], end = " ")
+
+for i in range(1, n):
+    jobid= int(sys.argv[i])
+     
+print("\n\njobid:", jobid)
+
+startServer()
 searchLogForString("CWWKF0011I")
 #searchLogForString("CWPKI0803A")
 print("AJM: gonna submit the batch job")
-rc = submitBatchJob()
+rc = restartBatchJob(jobid)
 print ("AJM: return code from batchJob =  ", rc)
 if (rc == 35):
     print("AJM: Batch job submission completed successfully...shutting down server and exiting")
-#    stopServer()
+    stopServer()
     # we want the script to exit with success, reflecting the batch job being successful, no need to set a rc here.
 else:
     #print("AJM: Batch Job submission not successful - RC = ", rc)
     print("AJM: shutting down server, exiting abnormally with rc! = ", rc)
     print("AJM: consider restarting job")
-#    stopServer()
+    stopServer()
     sys.exit(rc)

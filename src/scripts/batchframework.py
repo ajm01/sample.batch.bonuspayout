@@ -1,7 +1,7 @@
 import subprocess
 import time
 import threading
-import sys, os
+import sys, os, signal
 
 def timedOut():
     print("Did not find the liberty server start success message in the alloted time...exiting")
@@ -14,8 +14,17 @@ def startServer():
     print ("i've started the Liberty Server")
 
 def stopServer():
-    print ("Stopping Liberty Server")
-    subprocess.run(['/opt/ol/wlp/bin/server', 'stop'])
+    ps = subprocess.Popen(('ps', '-ef'), stdout=subprocess.PIPE)
+    grep = subprocess.Popen(('grep', 'defaultServer'), stdin=ps.stdout, stdout=subprocess.PIPE)
+    ps.stdout.close
+    output = subprocess.Popen(('awk', '{print $2}'), stdin=grep.stdout, stdout=subprocess.PIPE)
+    grep.stdout.close()
+    head = subprocess.Popen(('head', '-1'), stdin=output.stdout, stdout=subprocess.PIPE)
+    output.stdout.close()
+    pid = head.communicate()[0]
+    print("AJM: pid form call to head = ", pid)
+    print("AJM: killing the server now")
+    os.kill(int.from_bytes(pid.strip(), "big"), signal.SIGKILL)
 
 def readlines_then_tail(fin, searchStr):
     print("Iterate through lines and then tail for further lines.")
@@ -47,7 +56,7 @@ def searchLogForString(messageID):
     print("AJM: doing a find")
     subprocess.run(['find', '/tmp/logs', '-name', '"*.*"'])
     print("AJM: done...")
-    time.sleep(600)
+    ##time.sleep(600)
     with open('/tmp/logs/messages.log', 'r') as fin:
         print("setting timer")
         timer = threading.Timer(.01, timedOut)
@@ -58,22 +67,23 @@ def searchLogForString(messageID):
                 print("cancel timer")
                 timer.cancel()
 #                print ("AJM: found it in logline? -> " + line)
-                print ("Liberty Server is started ... will now stop it")
+                #print ("Liberty Server is started ... will now stop it")
                 fin.close()
                 break
 
 def submitBatchJob():
-    hostname =os.environ['POSTGRES_HOSTNAME']
-    print(f'hostname is {hostname}')
+    #hostname =os.environ['POSTGRES_HOSTNAME']
+    #print(f'hostname is {hostname}')
     #subprocess.run(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'])
 
     # failure batch submission - need to parameterize this
-    process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--jobPropertiesFile=/batchprops/forceFailureParms.txt', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'],
+    #, '--jobPropertiesFile=/batchprops/forceFailureParms.txt'
+    process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'],
                                stderr=subprocess.PIPE, 
                                stdout=subprocess.PIPE)
 
     # successful batch submission - need to parameterize this
-    #process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'],
+    #process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--jobPropertiesFile=/batchprops/forceFailureParms.txt', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'],
     #                           stderr=subprocess.PIPE, 
     #                           stdout=subprocess.PIPE)
     stdout, stderr = process.communicate()
@@ -82,6 +92,8 @@ def submitBatchJob():
     return exit_code
 
 #startServer()
+print("AJM: sleep 10 seconds")
+time.sleep(20)
 searchLogForString("CWWKF0011I")
 #searchLogForString("CWPKI0803A")
 print("AJM: gonna submit the batch job")
@@ -89,11 +101,13 @@ rc = submitBatchJob()
 print ("AJM: return code from batchJob =  ", rc)
 if (rc == 35):
     print("AJM: Batch job submission completed successfully...shutting down server and exiting")
-#    stopServer()
+    rc = 0
+    stopServer()
     # we want the script to exit with success, reflecting the batch job being successful, no need to set a rc here.
 else:
     #print("AJM: Batch Job submission not successful - RC = ", rc)
-    print("AJM: shutting down server, exiting abnormally with rc! = ", rc)
+#    print("AJM: shutting down server, exiting abnormally with rc! = ", rc)
     print("AJM: consider restarting job")
-#    stopServer()
-    sys.exit(rc)
+    stopServer()
+
+sys.exit(rc)

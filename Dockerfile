@@ -1,5 +1,5 @@
 # Step 1: Build the user's application
-FROM openliberty/application-stack:0.4 as compile
+FROM openliberty/application-stack:0.5 as compile
 
 # Make a well known place for shared library jars separate from the rest of the <server> contents (to help with caching)
 RUN mkdir /work/configlibdir \
@@ -81,5 +81,10 @@ RUN configure.sh && \
 
 RUN mkdir -p /config/batchprops
 COPY --from=compile --chown=1001:0 /work/outer-loop-app/batchprops /config/batchprops
+
+USER root
+RUN yum update -y
+RUN yum install -y procps
+USER 1001
 
 RUN rm -rf /logs/*.*

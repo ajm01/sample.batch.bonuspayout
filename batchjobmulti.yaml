@@ -24,7 +24,7 @@ spec:
        command:
        - /bin/sh
        - -c
-       - ln -s /logs /tmp/logs;/opt/ol/wlp/bin/server start; tail /logs/messages.log
+       - /opt/ol/wlp/bin/server run
      - name: batchmgr
        volumeMounts:
        - name: logs
@@ -37,4 +37,4 @@ spec:
        - python3 /scripts/batchframework.py
      dnsPolicy: ClusterFirst
      restartPolicy: Never
-
+     shareProcessNamespace: true

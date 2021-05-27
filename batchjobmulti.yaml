@@ -14,8 +14,8 @@ spec:
      containers:
      - name: bonuspayout
        volumeMounts:
-       - name: logs
-         mountPath: /tmp/logs
+       - name: logs 
+         mountPath: /logs
        image: ajymau/bonuspayout:dev-last
        envFrom:
        - secretRef:

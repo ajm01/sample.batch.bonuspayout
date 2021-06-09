@@ -85,6 +85,16 @@ COPY --from=compile --chown=1001:0 /work/outer-loop-app/batchprops /config/batch
 USER root
 RUN yum update -y
 RUN yum install -y procps
+# used the follwoing commented out items for debugging connection issues
+#RUN yum install -y lsof
+#RUN yum install -y iputils
+#RUN yum install -y curl
+#RUN yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+#RUN yum install -y postgresql
+#RUN yum module list | grep postgresql
+#RUN yum install -y postgresql:9.6
+#RUN dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+#RUN 
 USER 1001
 
 RUN rm -rf /logs/*.*

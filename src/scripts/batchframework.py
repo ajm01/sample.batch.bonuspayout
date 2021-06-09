@@ -80,7 +80,8 @@ def submitBatchJob():
 
     # failure batch submission - need to parameterize this
     #, '--jobPropertiesFile=/batchprops/forceFailureParms.txt'
-    process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=127.0.0.1:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'],
+	#, '--jobPropertiesFile=/batchprops/lotsOfRecords.txt'
+    process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait', '--jobPropertiesFile=/batchprops/runToCompletionParms.txt'],
                                stderr=subprocess.PIPE, 
                                stdout=subprocess.PIPE)
 
@@ -93,36 +94,28 @@ def submitBatchJob():
     print(stdout, stderr, exit_code)
     return exit_code
 
-def holdinplace():
-    #keep this container alive while i try some things out
-    while True:
-        print(".", end = '')
-        if path.exists("/tmp/.killmenow"):
-            print("\nAJM: time to end this...")
-            break
-
 #startServer()
+
+# let the liberty server init and create the log file to be scanned - 30 seconds is supper generous
 print("AJM: sleep 30 seconds")
 time.sleep(30)
 searchLogForString("CWWKF0011I")
 #searchLogForString("CWPKI0803A")
 print("AJM: gonna submit the batch job")
 
-holdinplace()
-
 rc = submitBatchJob()
 #print("AJM: sleep 300 seconds")
 #time.sleep(300)
 print ("AJM: return code from batchJob =  ", rc)
 if (rc == 35):
-    print("AJM: Batch job submission completed successfully...shutting down server and exiting")
+    print("AJM: Batch job submission completed successfully...exiting")
     rc = 0
-    stopServer()
+    #stopServer()
     # we want the script to exit with success, reflecting the batch job being successful, no need to set a rc here.
 else:
     #print("AJM: Batch Job submission not successful - RC = ", rc)
 #    print("AJM: shutting down server, exiting abnormally with rc! = ", rc)
     print("AJM: consider restarting job")
-    stopServer()
+    #stopServer()
 
 sys.exit(rc)

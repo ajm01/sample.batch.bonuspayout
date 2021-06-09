@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
- name: batch
+ name: batch2
 spec:
  backoffLimit: 0
  template:
@@ -24,7 +24,7 @@ spec:
        command:
        - /bin/sh
        - -c
-       - /opt/ol/wlp/bin/server run -- --defaultHostName=$HOSTNAME
+       - /opt/ol/wlp/bin/server run  -- --defaultHostName=$HOSTNAME
      - name: batchmgr
        volumeMounts:
        - name: logs

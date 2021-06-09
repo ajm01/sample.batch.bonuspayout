@@ -10,6 +10,11 @@ COPY --chown=1001:0 ./batchprops /batchprops
 
 #finally, install python for batch mgmt work
 RUN yum update -y
+# commenting out the next 3 items - used for debugging 
+#RUN yum install -y wget
+#RUN wget http://mirror.centos.org/centos/7/os/x86_64/Packages/telnet-0.17-65.el7_8.x86_64.rpm
+#RUN yum install -y ./telnet-0.17-65.el7_8.x86_64.rpm
+
 RUN yum install -y python3
 RUN yum install -y procps
 

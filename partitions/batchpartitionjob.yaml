@@ -1,0 +1,79 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+ name: batch
+spec:
+ backoffLimit: 0
+ template:
+   metadata:
+     name: batchpartition
+   spec:
+     volumes:
+     - name: logs
+       emptyDir: {}
+     containers:
+     - name: toplevel-job 
+       volumeMounts:
+       - name: logs 
+         mountPath: /logs
+       image: ajymau/oltl-partitions:dev-last
+       envFrom:
+       - secretRef:
+           name: bp-database-secret
+       imagePullPolicy: Always
+       command:
+       - /bin/sh
+       - -c
+       - /opt/ol/wlp/bin/server run -- --defaultHostName=$HOSTNAME
+     - name: partition-exec1 
+       volumeMounts:
+       - name: logs
+         mountPath: /logs
+       image: ajymau/olpe-partitions:dev-last
+       envFrom:
+       - secretRef:
+           name: bp-database-secret
+       imagePullPolicy: Always
+       command:
+       - /bin/sh
+       - -c
+       - /opt/ol/wlp/bin/server run -- --defaultHostName=$HOSTNAME
+     - name: partition-exec2
+       volumeMounts:
+       - name: logs
+         mountPath: /logs
+       image: ajymau/olpe-partitions:dev-last
+       envFrom:
+       - secretRef:
+           name: bp-database-secret
+       imagePullPolicy: Always
+       command:
+       - /bin/sh
+       - -c
+       - /opt/ol/wlp/bin/server run -- --defaultHostName=$HOSTNAME
+     - name: partition-exec2
+       volumeMounts:
+       - name: logs
+         mountPath: /logs
+       image: ajymau/olpe-partitions:dev-last
+       envFrom:
+       - secretRef:
+           name: bp-database-secret
+       imagePullPolicy: Always
+       command:
+       - /bin/sh
+       - -c
+       - /opt/ol/wlp/bin/server run -- --defaultHostName=$HOSTNAME
+     - name: python-script 
+       volumeMounts:
+       - name: logs
+         mountPath: /tmp/logs
+       image: ajymau/batchcli :dev-last
+       imagePullPolicy: Always
+       command:
+       - /bin/sh
+       - -c
+       - python3 /scripts/batchframework.py /batchprops/runToCompletionParms.txt
+     dnsPolicy: ClusterFirst
+     restartPolicy: Never
+     shareProcessNamespace: true

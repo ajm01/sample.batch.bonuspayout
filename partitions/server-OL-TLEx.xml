@@ -24,8 +24,10 @@
     </featureManager>
 
 
-    <variable name="db_xml" defaultValue="postgresql.xml"/>
-    <include location="${db_xml}" optional="true"/>
+    <!-- <variable name="db_xml" defaultValue="postgresql.xml"/>
+    <include location="${db_xml}" optional="true"/> -->
+        
+    <include location="postgresql.xml" optional="true"/>
 
     <variable name="autoStartBatch" value="false"/>
 

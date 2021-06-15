@@ -75,7 +75,7 @@
 	<jmsConnectionFactory id="batchConnectionFactory" jndiName="jms/batch/connectionFactory">
 		<properties.wasJms remoteServerAddress="localhost:${bvt.prop.jms.1}:BootstrapBasicMessaging"/>	
 	</jmsConnectionFactory>
-	<jmsQueue id="batchJobSubmissionQueue" jndiName="jms/batch/jobSubmissionQueue">
+	<jmsQueue id="batchJobSubmissionQueue" >
 		<properties.wasJms deliveryMode="Persistent" queueName="batchLibertyQueue" readAhead="AsConnection" timeToLive="0"></properties.wasJms>
 	</jmsQueue>
 

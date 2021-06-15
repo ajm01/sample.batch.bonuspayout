@@ -1,0 +1,508 @@
+
+
+
+<!DOCTYPE html>
+<html style="height: 100%; width: 100%; overflow: hidden; position: relative;">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="DC.Rights" content="© Copyright IBM Corp. 2017" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<link rel="stylesheet" href="dojo/resources/dojo.css" />
+<link rel="stylesheet" href="dijit/themes/dijit.css" />
+<link rel="stylesheet" href="idx/themes/oneui/oneui.css" />
+<link rel="stylesheet" href="gridx/resources/claro/Gridx.css" />
+<link rel="stylesheet" href="css/javabatch.css" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+	globalIsAdmin=true
+	console.info('isUserInRole("Administrator")=', globalIsAdmin);
+</script>
+
+
+<script src="dojo/dojo.js" data-dojo-config="locale: 'en-us'"></script>
+<script>
+  require([ "jsBatch/main" ], function(dashboard) {
+    document.documentElement.setAttribute("lang", dojo.locale);
+  });
+</script>
+<title>Java Batch Tool</title>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) 2016 IBM Corporation and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+   
+    Contributors:
+        IBM Corporation - initial API and implementation
+ 	-->
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="CommonLayer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 64 64" enable-background="new 0 0 64 64" display="none" xml:space="preserve">
+	 
+<!-- This rect element is for help edit the SVGs in Adobe Illustrator.  It adds no SVG functionality.  -->
+<rect display="inline" fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" width="32" height="32"/>
+
+<g id="search-icons" display="inline">
+	<g id="search">
+		<path fill="#FFFFFF" d="M24,2C11.9,2,2,11.9,2,24s9.9,22,22,22s22-9.9,22-22S36.1,2,24,2z M24,44C13,44,4,35,4,24S13,4,24,4
+			s20,9,20,20S35,44,24,44z"/>
+		
+			<rect x="47.8" y="42.1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -21.5243 52.0348)" fill="#FFFFFF" width="8.5" height="19.8"/>
+		<circle fill="#FFFFFF" cx="42" cy="42" r="2"/>
+	</g>
+	<g id="search-small">
+		<path fill="#FFFFFF" d="M12,1C5.9,1,1,5.9,1,12s4.9,11,11,11s11-4.9,11-11C23,6,18.1,1,12,1z M12,21c-5,0-9-4-9-9s4-9,9-9s9,4,9,9
+			S17,21,12,21z"/>
+		
+			<rect x="23.9" y="21" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -10.7338 25.9861)" fill="#FFFFFF" width="4.2" height="9.9"/>
+		<circle fill="#FFFFFF" cx="21" cy="21" r="1"/>
+	</g>
+</g>
+<g id="dashboard-icons" display="inline">
+	<g id="dashboard">
+		<polygon fill="#FFFFFF" points="29.1,34.8 32.2,37.9 41.4,22.5 26,31.8 		"/>
+		<path fill="#FFFFFF" d="M59.8,31.5C59.6,16.8,48,4.9,33.4,4.2l0,0h-2l0,0C16.3,4.4,4.2,16.8,4.2,32c0,15.3,12.4,27.8,27.8,27.8
+			c14.9,0,27-11.7,27.8-26.3l0,0V31.5L59.8,31.5z M57.8,33.5C57,47,45.8,57.8,32,57.8S7,47,6.2,33.5h7.4v-2H6.2
+			c0.1-6.6,2.7-12.6,6.9-17.1l5.7,5.7l1.4-1.4L14.5,13c4.5-4.2,10.4-6.7,17-6.9V13h2V6.2c6.4,0.4,12.2,3.1,16.6,7.3l-5.3,5.3
+			l1.4,1.4l5.2-5.2c3.9,4.4,6.4,10.2,6.5,16.6H51v2L57.8,33.5L57.8,33.5z"/>
+	</g>
+	<g id="dashboard-small">
+		<path fill="#FFFFFF" d="M16,1.9C8.2,1.9,1.9,8.2,1.9,16S8.2,30.1,16,30.1S30.1,23.8,30.1,16C30,8.2,23.7,1.9,16,1.9z M16,28.1
+			c-6.4,0-11.7-5-12-11.4h3.4v-0.9H3.9c0.1-3.1,1.3-5.9,3.2-8l2.6,2.6l0.7-0.7L7.8,7.1c2.1-1.9,4.9-3.1,7.9-3.2v3.2h0.9V4
+			c3,0.2,5.7,1.4,7.7,3.4l-2.4,2.4l0.7,0.7L25,8.1c1.8,2.1,3,4.8,3,7.7h-3.2v0.9H28C27.6,23.1,22.4,28.1,16,28.1z"/>
+		<polygon fill="#FFFFFF" points="14.6,17.4 16.1,18.8 20.4,11.6 13.2,15.9 		"/>
+	</g>
+</g>
+<g id="settings-icons" display="inline">
+	<g id="settings">
+		<path fill="#4178BE" d="M53.9,32.2c0-1.1-0.1-2.3-0.3-3.4l6.8-6l-5.8-9.5L46.5,16c-1.9-1.7-4.2-3-6.7-3.9L38,4.2H26.8L25,12.1
+			c-2.5,0.9-4.7,2.2-6.7,3.9l-8.1-2.7l-5.8,9.5l6.8,6c-0.2,1.1-0.3,2.2-0.3,3.4c0,1.1,0.1,2.3,0.3,3.4l-6.8,6l5.8,9.5l8.1-2.7
+			c1.9,1.7,4.2,3,6.7,3.9l1.8,7.9H38l1.8-7.9c2.5-0.9,4.7-2.2,6.7-3.9l8.1,2.7l5.8-9.5l-6.8-6C53.8,34.5,53.9,33.3,53.9,32.2z
+			 M58,41.9l-4.2,6.9l-6.7-2.2l-1-0.3L45.3,47c-1.8,1.6-3.8,2.8-6.1,3.6l-0.9,0.3l-0.2,1l-1.5,6.4h-8.2l-1.5-6.4l-0.2-1l-0.9-0.3
+			c-2.2-0.8-4.3-2-6.1-3.6l-0.8-0.7l-1,0.3L11,48.8l-4.2-6.9l5.6-4.9l0.8-0.7l-0.2-1c-0.2-1.1-0.3-2.1-0.3-3.1
+			c0-0.9,0.1-1.9,0.3-3.1l0.2-1l-0.8-0.7l-5.6-4.9l4.2-6.9l6.7,2.2l1,0.3l0.8-0.7c1.8-1.6,3.8-2.8,6.1-3.6l0.9-0.3l0.2-1l1.5-6.4
+			h8.2l1.5,6.4l0.2,1l0.9,0.3c2.2,0.8,4.3,2,6.1,3.6l0.8,0.7l1-0.3l6.7-2.2l4.2,6.9l-5.6,4.9l-0.8,0.7l0.2,1
+			c0.2,1.1,0.3,2.1,0.3,3.1c0,0.9-0.1,1.9-0.3,3.1l-0.2,1l0.8,0.7L58,41.9z"/>
+		<path fill="#4178BE" d="M32.4,21c-6.2,0-11.2,5-11.2,11.2s5,11.2,11.2,11.2s11.2-5,11.2-11.2S38.6,21,32.4,21z M32.4,35.9
+			c-2.1,0-3.7-1.7-3.7-3.7c0-2.1,1.7-3.7,3.7-3.7s3.7,1.7,3.7,3.7C36.1,34.3,34.5,35.9,32.4,35.9z"/>
+	</g>
+	<g id="settings-small">
+		<path fill="#4178BE" d="M26.6,16c0-0.6-0.1-1.1-0.1-1.7l3.4-3L27,6.6l-4,1.3c-1-0.8-2.1-1.5-3.3-2L18.8,2h-5.6l-0.9,3.9
+			C11.1,6.4,10,7,9,7.9L5,6.6l-2.9,4.7l3.4,3c-0.1,0.5-0.1,1.1-0.1,1.7s0.1,1.1,0.1,1.7l-3.4,3l2.8,4.7l4-1.3c1,0.8,2.1,1.5,3.3,2
+			l0.9,3.9h5.6l0.9-3.9c1.2-0.5,2.3-1.1,3.3-2l4,1.3l2.9-4.7l-3.4-3C26.6,17.1,26.6,16.5,26.6,16z M27.5,21l-1.3,2.1l-2.7-0.8
+			l-1-0.3l-0.8,0.7c-0.8,0.7-1.7,1.2-2.7,1.6l-0.9,0.3l-0.2,1l-0.6,2.5h-2.6l-0.6-2.5l-0.2-1L13,24.3c-1-0.4-1.9-0.9-2.7-1.6L9.5,22
+			l-1,0.3l-2.7,0.9l-1.3-2.1l2.2-1.9l0.7-0.8l-0.2-1c-0.1-0.5-0.1-1-0.1-1.4s0-0.9,0.1-1.4l0.2-1l-0.8-0.7L4.4,11l1.3-2.1l2.7,0.9
+			l1,0.3l0.8-0.7c0.8-0.7,1.7-1.2,2.7-1.6l0.9-0.3l0.2-1L14.6,4h2.6l0.6,2.4l0.2,1l0.9,0.3c1,0.4,1.9,0.9,2.7,1.6l0.8,0.7l1-0.3
+			l2.7-0.9l1.3,2.1l-2.2,1.9l-0.7,0.8l0.2,1c0.1,0.5,0.1,1,0.1,1.4c0,0.4,0,0.9-0.1,1.4l-0.2,1l0.8,0.7L27.5,21z"/>
+		<path fill="#4178BE" d="M15.9,10.4c-3.1,0-5.6,2.5-5.6,5.6s2.5,5.6,5.6,5.6s5.6-2.5,5.6-5.6S19,10.4,15.9,10.4z M15.9,17.8
+			c-1,0-1.9-0.8-1.9-1.9s0.8-1.9,1.9-1.9s1.9,0.8,1.9,1.9S17,17.8,15.9,17.8z"/>
+	</g>
+</g>
+<g id="status-icons-old" display="inline">
+	<g id="status-alert">
+		<path fill="#D74108" d="M32,6L2,58h60L32,6z M32,10l26.5,46h-53L32,10z"/>
+		<polygon fill="#D74108" points="30,28 30,32 31,42 33,42 34,32 34,28 		"/>
+		<circle fill="#D74108" cx="32" cy="46" r="2"/>
+	</g>
+	<g id="status-alert-small">
+		<path fill="#D74108" d="M16,2.1l-15,26h30L16,2.1z M16,6.1l11.5,20h-23L16,6.1z"/>
+		<polygon fill="#D74108" points="15,13.1 15,15.1 15.5,20.1 16.5,20.1 17,15.1 17,13.1 		"/>
+		<circle fill="#D74108" cx="16" cy="22.1" r="1"/>
+	</g>
+	<g id="status-alert-gray-small">
+		<path fill="#6F6F6F" d="M16,1.1l-15,26h30L16,1.1z M16,5.1l11.5,20h-23L16,5.1z"/>
+		<polygon fill="#6F6F6F" points="15,12.1 15,14.1 15.5,19.1 16.5,19.1 17,14.1 17,12.1 		"/>
+		<circle fill="#6F6F6F" cx="16" cy="21.1" r="1"/>
+	</g>
+</g>
+<g id="actionMenu-shared-icons" display="inline">
+    <path id="actionMenu-stop-small" fill="#FFFFFF" d="M6.3,25.7c0-6.8,0-12.9,0-19.4c6.5,0,12.6,0,19.4,0c0,6.3,0,12.6,0,19.4
+        C19.5,25.7,13.2,25.7,6.3,25.7z"/>
+    <path id="actionMenu-restart-small" fill="#FFFFFF" d="M16.5,30.4c-6.5,0-11.8-5.3-11.8-11.8S10,6.8,16.5,6.7h5L18,3.2l2-2l7,7
+        l-7,7l-2-2l3.5-3.5h-5c-4.9,0-8.9,4-8.9,8.9s4,8.9,8.9,8.9c2.4,0,4.6-0.9,6.2-2.6l0.3-0.3l2.1,2L24.9,27
+        C22.7,29.1,19.6,30.4,16.5,30.4z"/>
+    <g id="actionMenu-purge-small">
+        <rect fill="#FFFFFF" x="9" y="15" width="14" height="2"/>
+        <path fill="#FFFFFF"d="M16,2C8.3,2,2,8.3,2,16s6.3,14,14,14s14-6.3,14-14S23.7,2,16,2z M16,28C9.4,28,4,22.6,4,16S9.4,4,16,4
+        s12,5.4,12,12S22.6,28,16,28z"/>
+    </g>
+</g>
+</svg>
+
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) 2016 IBM Corporation and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+   
+    Contributors:
+        IBM Corporation - initial API and implementation
+ 	-->
+<!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="JavaBatchLayer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 64 64" enable-background="new 0 0 64 64" display="none" xml:space="preserve">
+		<rect id="box" fill="none" stroke="#000000" stroke-miterlimit="10" width="32" height="32"/>
+		<g id="top-Icons" display="inline">
+			<g id="top">
+				<rect x="12" y="4" fill="#FFFFFF" width="40" height="8"/>
+				<polygon fill="#FFFFFF" points="12.9,35.8 16.5,39.6 29,26.9 29,60 35,60 35,26.9 47.5,39.6 51.2,35.8 32.1,16.7 				"/>
+			</g>
+			<g id="top-grey">
+				<rect x="12" y="4" fill="#6F6F6F" width="40" height="8"/>
+				<polygon fill="#6F6F6F" points="12.9,35.8 16.5,39.6 29,26.9 29,60 35,60 35,26.9 47.5,39.6 51.2,35.8 32.1,16.7 				"/>
+			</g>
+			<g id="top-small">
+				<rect x="6" y="2" fill="#FFFFFF" width="20" height="4"/>
+				<polygon fill="#FFFFFF" points="6.5,17.9 8,19.8 14,13.5 14,30 17,30 17,13.5 23.5,19.8 25.5,17.9 16,8.4 				"/>
+			</g>
+		</g>
+		<g id="submitted-Icons" display="inline">
+			<g id="submitted">
+				<path fill="#4178BE" d="M26,17v-6H4v5.6v5.6V52h56V22.3V17H26z M58,50H6V22h52V50z"/>
+				<g>
+					<polygon fill="#4178BE" points="28,40.1 21.4,33.5 18.6,36.4 28,45.8 45.4,28.4 42.6,25.5 					"/>
+				</g>
+			</g>
+			<g id="submitted-small">
+				<path fill="#4178BE" d="M13,8V5H2v2.8v2.8V26h28V10.6V8H13z M29,25H3V11h26V25z"/>
+				<g>
+					<polygon fill="#4178BE" points="14,19.6 10.7,16.3 9.3,17.7 14,22.4 22.7,13.7 21.3,12.3 					"/>
+				</g>
+			</g>
+		</g>
+		<g id="stopped-Icons" display="inline">
+			<g id="stopped">
+				<circle fill="#8B191D" cx="28.4" cy="31.7" r="3.2"/>
+				<circle fill="#8B191D" cx="16.2" cy="31.7" r="3.2"/>
+				<circle fill="#8B191D" cx="3.9" cy="31.7" r="3.2"/>
+				<rect x="38" y="19" fill="#8B191D" width="25" height="26"/>
+			</g>
+			<g id="stopped-small">
+				<circle fill="#8B191D" cx="14.3" cy="15.8" r="1.5"/>
+				<circle fill="#8B191D" cx="8.4" cy="15.8" r="1.5"/>
+				<circle fill="#8B191D" cx="2.5" cy="15.8" r="1.5"/>
+				<rect x="19" y="10" fill="#8B191D" width="12" height="12"/>
+			</g>
+		</g>
+		<g id="refresh-Icons" display="inline">
+			<g id="refresh-small">
+				<path fill="#FFFFFF" d="M26.8,10.1C24.8,6,20.7,3,16,3C10.5,3,5.8,7,4.3,12h1.8c1.4-4,5.3-7.2,9.9-7.2c4,0,7.4,2.4,9.2,5.8
+					l-3.9,1.7l7,3.7L30,8.7L26.8,10.1z"/>
+				<path fill="#FFFFFF" d="M16,27.3c-3.9,0-7.4-2.4-9.2-5.8l3.9-1.7l-7-3.7L2,23.5l3.2-1.3c2.1,4.1,6.1,7,10.8,7
+					c5.5,0,10.2-4.1,11.7-9.1h-1.8C24.4,24,20.6,27.3,16,27.3z"/>
+			</g>
+			<g id="refresh">
+				<path fill="#FFFFFF" d="M53.6,19.9C49.5,11.7,41.4,5.8,32,5.8C20.9,5.8,11.6,14,8.6,24h3.7C15.1,16,22.9,9.5,32,9.5
+					c7.9,0,14.8,4.8,18.4,11.7l-7.9,3.4l14,7.5L60,17.2L53.6,19.9z"/>
+				<path fill="#FFFFFF" d="M32,54.6c-7.9,0-14.8-4.8-18.4-11.6l7.9-3.4l-14-7.5L4,46.9l6.4-2.7c4.1,8.2,12.3,14.1,21.6,14.1
+					c11.1,0,20.4-8.3,23.4-18.3h-3.7C48.9,48,41.1,54.6,32,54.6z"/>
+			</g>
+		</g>
+		<g id="partitioned-step-Icons" display="inline">
+			<g id="partitioned-step">
+				<g>
+					<polygon fill="#A4A4A4" points="40.9,32.7 32,39.9 32,25.5 					"/>
+					<polyline fill="#A4A4A4" points="33.4,30.9 20,30.9 20,33.9 33.2,34 					"/>
+				</g>
+				<rect x="4.5" y="22.5" fill="#FECB42" stroke="#D78A12" stroke-miterlimit="10" width="18" height="19"/>
+				<rect x="46" y="4" fill="#3677AD" width="13" height="12"/>
+				<rect x="46" y="47" fill="#3677AD" width="13" height="13"/>
+				<rect x="46" y="26" fill="#3677AD" width="13" height="12"/>
+			</g>
+			<g id="partitioned-step-small">
+				<g>
+					<polygon fill="#A4A4A4" points="20.9,17 16,21 16,13 					"/>
+					<polyline fill="#A4A4A4" points="16.5,16 9,16 9,17.7 16.4,17.7 					"/>
+				</g>
+				<rect x="0.5" y="11.5" fill="#FECB42" stroke="#D78A12" stroke-miterlimit="10" width="10" height="10"/>
+				<rect x="24" y="1" fill="#3677AD" width="7" height="7"/>
+				<rect x="24" y="25" fill="#3677AD" width="7" height="7"/>
+				<rect x="24" y="13" fill="#3677AD" width="7" height="7"/>
+			</g>
+		</g>
+		<g id="logfile-Icons" display="inline">
+			<g id="logfile">
+				<rect x="13" y="58" fill="#4178BE" width="37" height="2"/>
+				<path fill="#4178BE" d="M13,4v7.5V56h37V11.5V4H13z M48,54H15V13h33V54z"/>
+				<rect x="20" y="30" fill="#4178BE" width="23" height="2"/>
+				<rect x="20" y="23" fill="#4178BE" width="23" height="2"/>
+				<rect x="20" y="37" fill="#4178BE" width="23" height="2"/>
+			</g>
+			<g id="logfile-small">
+				<rect x="7" y="29" fill="#4178BE" width="18" height="1"/>
+				<path fill="#4178BE" d="M7,2v3.9V28h18V5.9V2H7z M24,26H8V7h16V26z"/>
+				<rect x="10" y="15" fill="#4178BE" width="12" height="1"/>
+				<rect x="10" y="12" fill="#4178BE" width="12" height="1"/>
+				<rect x="10" y="18" fill="#4178BE" width="12" height="1"/>
+			</g>
+		</g>
+		<g id="jmsqueued-Icons" display="inline">
+	    	<g id="jmsqueued">
+				<g>
+					<polygon fill="#BE9B00" points="58,33 58,48 6,48 6,33 4,33 4,47.7 4,55 5.9,55 58.1,55 60,55 60,47.7 60,33 					"/>
+				</g>
+				<rect x="14" y="18" fill="#BE9B00" width="37" height="4"/>
+				<rect x="14" y="27" fill="#BE9B00" width="37" height="4"/>
+				<rect x="14" y="36" fill="#BE9B00" width="37" height="4"/>
+				<rect x="14" y="9" fill="#BE9B00" width="37" height="4"/>
+			</g>
+			<g id="jmsqueued-small">
+				<g>
+					<polygon fill="#BE9B00" points="29,17 29,25 3,25 3,17 2,17 2,24.2 2,28 2.9,28 28.9,28 30,28 30,24.2 30,17 					"/>
+				</g>
+				<rect x="7" y="9" fill="#BE9B00" width="19" height="3"/>
+				<rect x="7" y="14" fill="#BE9B00" width="19" height="2"/>
+				<rect x="7" y="18" fill="#BE9B00" width="19" height="2"/>
+				<rect x="7" y="5" fill="#BE9B00" width="19" height="2"/>
+			</g>
+		</g>
+		<g id="jmsconsumed-Icons" display="inline">
+			<g id="jmsconsumed">
+				<polygon fill="#5A6464" points="39.1,12.1 35,16.2 50.4,31.5 50.4,31.5 35,46.9 39.1,51 58.6,31.5 				"/>
+				<circle fill="#5A6464" cx="32.4" cy="31.7" r="3.2"/>
+				<circle fill="#5A6464" cx="20.2" cy="31.7" r="3.2"/>
+				<circle fill="#5A6464" cx="7.9" cy="31.7" r="3.2"/>
+			</g>
+			<g id="jmsconsumed-small">
+				<circle fill="#5A6464" cx="16.3" cy="15.8" r="1.5"/>
+				<circle fill="#5A6464" cx="10.4" cy="15.8" r="1.5"/>
+				<circle fill="#5A6464" cx="4.5" cy="15.8" r="1.5"/>
+				<g id="jms-consumed_x5F_56_1_">
+					<polygon fill="#5A6464" points="19.4,6.1 17.4,8.1 24.9,15.6 24.9,15.6 17.4,23 19.4,25 28.8,15.6 					"/>
+				</g>
+			</g>
+		</g>
+		<g id="jobInstance-Icons" display="inline">
+			<g id="job">
+				<path fill="#4178BE" d="M60,57c0,1.7-1.3,3-3,3H13c-1.7,0-3-1.3-3-3V13c0-1.7,1.3-3,3-3h44c1.7,0,3,1.3,3,3V57z"/>
+				<path fill="#4178BE" d="M8,52.1c-1-0.4-2-1.5-2-2.7V8.8C6,7.2,7.2,6,8.8,6h40.6c1.3,0,2.3,1,2.7,2H54V6.9C54,5.3,52.9,4,51.3,4
+					H6.9C5.3,4,4,5.3,4,6.9v44.4C4,52.9,5.3,54,6.9,54H8V52.1z"/>
+			</g>
+			<g id="job-small">
+				<path fill="#4178BE" d="M27,30H8c-1.7,0-3-1.3-3-3V8c0-1.7,1.3-3,3-3h19c1.7,0,3,1.3,3,3v19C30,28.7,28.7,30,27,30z"/>
+				<path fill="#4178BE" d="M4,26c-0.5-0.2-1-0.7-1-1.4V4.4C3,3.6,3.6,3,4.4,3h20.3c0.6,0,1.2,0.5,1.4,1h1V3.4C27,2.6,26.5,2,25.7,2
+					H3.4C2.6,2,2,2.6,2,3.4v22.2C2,26.5,2.6,27,3.4,27H4V26z"/>
+			</g>
+		</g>
+		<g id="filter-Icons" display="inline">
+			<path id="filter-small" fill="#FFFFFF" d="M30,2H2v3.7l11,11.2V30l6-5.6v-3.2c0,0.8,1.6,1.3,2.7,1.3c2.1,0,3.7-1.7,3.7-3.7
+				s-1.7-3.7-3.8-3.7c-0.4,0-0.8,0.1-1.1,0.2L30,5.7V2z M23.5,18.8c0,1-0.8,1.9-1.9,1.9c-1,0-1.9-0.8-1.9-1.9c0-1,0.8-1.9,1.9-1.9
+				C22.6,16.9,23.5,17.8,23.5,18.8z M17.5,15.7L17,16.2v0.8v6.7l-2,1.9v-8.6v-0.8l-0.5-0.4L4.6,6h22.7L17.5,15.7z"/>
+			<path id="filter" fill="#FFFFFF" d="M60,4H4v7.5l22,22.4V60l12-11.2v-6.3c0,1.6,3.2,2.6,5.4,2.6c4.1,0,7.4-3.3,7.4-7.5
+				s-3.4-7.5-7.5-7.5c-0.8,0-1.6,0.2-2.3,0.4l19-19V4z M46.9,37.6c0,2.1-1.7,3.7-3.7,3.7c-2.1,0-3.7-1.7-3.7-3.7
+				c0-2.1,1.7-3.7,3.7-3.7C45.3,33.9,46.9,35.5,46.9,37.6z M35,31.5l-1,0.8v1.5v13.4L30,51V33.9v-1.5l-1-0.8L9.3,12h45.4L35,31.5z"/>
+		</g>
+		<g id="failed-Icons" display="inline">
+			<g id="failed">
+				<circle fill="#BA2430" cx="32" cy="32" r="28"/>
+				<polygon fill="#FFFFFF" points="40.6,20.6 32,29.2 23.4,20.6 20.6,23.4 29.2,32 20.6,40.6 23.4,43.4 32,34.8 40.6,43.4 43.4,40.6
+					34.8,32 43.4,23.4 		"/>
+			</g>
+			<g id="failed-small">
+				<circle fill="#BA2430" cx="16" cy="16" r="14"/>
+				<polygon fill="#FFFFFF" points="20.3,10.3 16,14.6 11.7,10.3 10.3,11.7 14.5,16 10.3,20.3 11.7,21.7 16,17.5 20.3,21.7 21.7,20.3
+					17.4,16 21.7,11.7 		"/>
+			</g>
+		</g>
+		<g id="execution-Icons" display="inline">
+			<g id="execution">
+				<polygon id="dispatched-small_2_" fill="#5BA845" points="27.9,50.2 17.7,26.5 15.4,36 2,36 2,32 12.1,32 16.4,13.6 26.7,36.3
+					28.9,26 44,26 44,32 32.1,32 				"/>
+				<g>
+					<circle fill="#FFFFFF" cx="47.9" cy="28" r="11.8"/>
+					<path id="completed-small_2_" fill="#4178BE" d="M48.6,15.4c-7.4,0-13.4,6-13.4,13.4s6,13.4,13.4,13.4s13.4-6,13.4-13.4
+						S56.1,15.4,48.6,15.4z M46.8,34.3l-5.5-5.5l1.8-1.8l3.7,3.7l7.3-7.3l1.8,1.7L46.8,34.3z"/>
+				</g>
+			</g>
+			<g id="execution-small">
+				<polygon id="dispatched-small_1_" fill="#5BA845" points="14.2,25 9.1,13.2 8,18 1,18 1,16 6.3,16 8.5,6.7 13.6,18.1 14.7,13
+					22,13 22,16 16.3,16 				"/>
+				<g>
+					<circle fill="#FFFFFF" cx="24.2" cy="13.8" r="5.9"/>
+					<path id="completed-small_1_" fill="#4178BE" d="M24.6,7.5c-3.7,0-6.7,3-6.7,6.7s3,6.7,6.7,6.7s6.7-3,6.7-6.7
+						S28.3,7.5,24.6,7.5z M23.6,16.9l-2.7-2.7l0.9-0.9l1.8,1.8l3.6-3.6l0.9,0.9L23.6,16.9z"/>
+				</g>
+			</g>
+		</g>
+		<g id="download-2-Icons" display="inline">
+			<polygon id="download-2-arrow" fill="#C7C7C7" points="48.3,26.8 45.7,24.1 34,35.9 34,5 30,5 30,35.9 18.3,24.1 15.7,26.8 32,43
+				"/>
+			<polygon id="download-2-bottom" fill="#C7C7C7" points="56,37 56,52 8,52 8,37 4,37 4,51.6 4,59 7.7,59 56.3,59 60,59 60,51.6
+				60,37 			"/>
+		</g>
+		<g id="download-Icons" display="inline">
+			<g id="download">
+				<polygon fill="#FFFFFF" points="48.3,26.8 45.7,24.1 34,35.9 34,5 30,5 30,35.9 18.3,24.1 15.7,26.8 32,43 				"/>
+				<polygon fill="#FFFFFF" points="56,37 56,52 8,52 8,37 4,37 4,51.6 4,59 7.7,59 56.3,59 60,59 60,51.6 60,37 				"/>
+			</g>
+			<g id="download-grey">
+				<polygon fill="#6F6F6F" points="48.3,26.8 45.7,24.1 34,35.9 34,5 30,5 30,35.9 18.3,24.1 15.7,26.8 32,43 				"/>
+				<polygon fill="#6F6F6F" points="56,37 56,52 8,52 8,37 4,37 4,51.6 4,59 7.7,59 56.3,59 60,59 60,51.6 60,37 				"/>
+			</g>
+			<g id="download-small">
+				<polygon fill="#FFFFFF" points="24.1,13.9 22.8,12.6 17,18.4 17,3 15,3 15,18.4 9.2,12.6 7.9,13.9 16,22 				"/>
+				<polygon fill="#FFFFFF" points="28,19 28,27 4,27 4,19 2,19 2,26.3 2,30 3.9,30 28.1,30 30,30 30,26.3 30,19 				"/>
+			</g>
+			<g id="download-grey-small">
+				<polygon fill="#6F6F6F" points="48.3,26.8 45.7,24.1 34,35.9 34,5 30,5 30,35.9 18.3,24.1 15.7,26.8 32,43 				"/>
+				<polygon fill="#6F6F6F" points="56,37 56,52 8,52 8,37 4,37 4,51.6 4,59 7.7,59 56.3,59 60,59 60,51.6 60,37 				"/>
+			</g>
+		</g>
+		<g id="dispatched-Icons" display="inline">
+			<polygon id="dispatched" fill="#5BA845" points="39.6,56.2 26,25.1 23,38 4,38 4,33 18.6,33 24.3,8.2 37.9,38.9 40.9,26 60,26
+				60,32 45.1,32 			"/>
+			<polygon id="dispatched-small" fill="#5BA845" points="20.1,28.2 13.2,12.4 11.7,19 2,19 2,17 9.4,17 12.3,4 19.2,19.6 20.7,13
+				30,13 30,16 22.9,16 			"/>
+		</g>
+		<g id="completed-Icons" display="inline">
+			<g id="completed-small">
+				<g>
+					<path fill="#4B8400" d="M16.4,2c-7.7,0-14,6.3-14,14s6.3,14,14,14s14-6.3,14-14S24.1,2,16.4,2z M14.5,21.7L8.7,16l1.9-1.9
+						l3.8,3.8l7.6-7.6l1.9,1.8L14.5,21.7z"/>
+				</g>
+			</g>
+			<g id="completed">
+				<g>
+				<path fill="#4B8400" d="M32,4C16.5,4,4,16.5,4,32s12.5,28,28,28s28-12.5,28-28S47.5,4,32,4z M28.2,43.5L16.7,32l3.8-3.8l7.6,7.6
+					l15.2-15.2l3.8,3.6L28.2,43.5z"/>
+				</g>
+			</g>
+		</g>
+		<g id="bottom-Icons" display="inline">
+			<g id="bottom">
+				<rect x="12" y="52" fill="#FFFFFF" width="40" height="8"/>
+				<polygon fill="#FFFFFF" points="51.1,28.2 47.5,24.4 35,37.1 35,4 29,4 29,37.1 16.5,24.4 12.8,28.2 31.9,47.3 				"/>
+			</g>
+			<g id="bottom-grey">
+				<rect x="12" y="52" fill="#6F6F6F" width="40" height="8"/>
+				<polygon fill="#6F6F6F" points="51.1,28.2 47.5,24.4 35,37.1 35,4 29,4 29,37.1 16.5,24.4 12.8,28.2 31.9,47.3 				"/>
+			</g>
+			<g id="bottom-small">
+				<rect x="6" y="26" fill="#FFFFFF" width="20" height="4"/>
+				<polygon fill="#FFFFFF" points="25.5,14.1 23.5,12.2 17,18.5 17,2 14,2 14,18.5 8,12.2 6.3,14.1 15.9,23.6 				"/>
+			</g>
+		</g>
+		<g id="caret-icons" display="inline">
+			<g id="caret">
+				<polygon fill="#6F6F6F" points="24.9,55.2 21.8,52.8 37.9,32 21.8,11.2 24.9,8.8 43,32 		"/>
+			</g>
+			<g id="caret-small">
+				<polygon fill="#6F6F6F" points="13.9,27 12.3,25.8 19.9,15.9 12.3,6.1 13.9,4.9 22.5,15.9 		"/>
+			</g>
+			<g id="caret-white-small">
+				<polygon fill="#FFFFFF" points="13.9,27 12.3,25.8 19.9,15.9 12.3,6.1 13.9,4.9 22.5,15.9 		"/>
+			</g>
+			<g id="double-caret">
+				<polygon fill="#6F6F6F" points="35.1,55.2 32,52.8 48.1,32 32,11.2 35.1,8.8 53.2,32 		"/>
+				<polygon fill="#6F6F6F" points="14.3,55.2 11.2,52.8 27.3,32 11.2,11.2 14.3,8.8 32.4,32 		"/>
+			</g>
+		</g>
+		<g id="abandoned-Icons" display="inline">
+			<g id="abandoned">
+				<path fill="#D74108" d="M32,6L2,58h60L32,6z M32,10l26.5,46h-53L32,10z"/>
+				<polygon fill="#D74108" points="30,28 30,32 31,42 33,42 34,32 34,28 				"/>
+				<circle fill="#D74108" cx="32" cy="46" r="2"/>
+			</g>
+			<g id="abandoned-small">
+				<path fill="#D74108" d="M16,2L1,28h30L16,2z M16,6l11.5,20h-23L16,6z"/>
+				<polygon fill="#D74108" points="15,13 15,15.1 15.5,20 16.5,20 17,15.1 17,13 				"/>
+				<circle fill="#D74108" cx="16" cy="22.1" r="1"/>
+			</g>
+		</g>
+		<g id="started-Icons" display="inline">
+    		<polygon id="started" fill="#5BA845" points="39.6,56.2 26,25.1 23,38 4,38 4,33 18.6,33 24.3,8.2 37.9,38.9 40.9,26 60,26
+        		60,32 45.1,32   "/>
+    		<polygon id="started-small" fill="#5BA845" points="20.1,28.2 13.2,12.4 11.7,19 2,19 2,17 9.4,17 12.3,4 19.2,19.6 20.7,13
+        		30,13 30,16 22.9,16     "/>
+		</g>
+		<g id="java-batch-breadcrumb-Icons" display="inline">
+			<g id="jobinst-small">
+				<path fill="#FFFFFF" d="M30.752,7.454V1.187h-6.267v2.279H14.8V15.43H7.393v-2.279H1.126v6.267h6.267v-2.279H14.8v11.394h9.685v2.279h6.267v-6.267
+					h-6.267v2.279h-7.976v-9.685h7.976v2.279h6.267v-6.267h-6.267v2.279h-7.976V5.175h7.976v2.279H30.752z M26.194,2.896h2.849v2.849
+					h-2.849V2.896z M26.194,26.255h2.849v2.849h-2.849V26.255z M26.194,14.861h2.849v2.849h-2.849V14.861z"/>
+			</g>
+		</g>
+        <g id="submission-Icons" display="inline">
+           <g id="submission-error-small">
+                <path fill="#8B191D" d="M16,0C7.2,0,0,7.2,0,16s7.2,16,16,16s16-7.2,16-16S24.8,0,16,0z M23.1,20.2l-2.8,2.8L16,18.8l-4.2,4.2l-2.8-2.8l4.2-4.2
+                    l-4.2-4.2l2.8-2.8l4.2,4.2l4.2-4.2l2.8,2.8L18.8,16L23.1,20.2z"/>
+           </g>
+        </g>
+        <g id="generic-Icons" display="inline">
+           <g id="add-new-small">
+						 		<path d="M16,0C7.2,0,0,7.2,0,16s7.2,16,16,16s16-7.2,16-16S24.8,0,16,0z M24,18h-6v6h-4v-6H8v-4h6V8h4v6h6V18z"/>
+           </g>
+           <g id="remove-small">
+						 		<path d="M16,0C7.2,0,0,7.2,0,16s7.2,16,16,16s16-7.2,16-16S24.8,0,16,0z M24,18H8v-4h16V18z"/>
+           </g>
+        </g>
+</svg>
+
+</head>
+
+<style type="text/css">
+	body{
+		margin:0px;
+	}
+</style>
+
+<body class="oneui" style="height: 100%; width: 100%">
+    <noscript role="region" aria-label="JavaScript required">
+        <div>
+            <h2>Java Batch Tool requires JavaScript. JavaScript is currently disabled.</h2>
+            <h2>Enable JavaScript or use a browser which supports JavaScript.</h2>
+        </div>
+    </noscript>
+    
+    <div id="mainContainer" role="main" style="height: 100%; width: 100%;">
+  	  <div style="width: 100%; height: 100%;" id="javaBatchRootBorderContainer">
+  	  
+ 	    <!-- The breadcrumb bar -->
+      	<div data-dojo-type="dijit.layout.StackContainer" id="breadcrumbStackContainer-id">
+             <div data-dojo-type="dijit.layout.ContentPane" id="breadcrumbAndSearchDiv" label="Breadcrumb">
+             
+                 <!-- The area where the breadcrumb buttons are attached.  The dashboard button is always first starting from left. -->
+                 <div data-dojo-type="dijit.layout.ContentPane" id="breadcrumbDiv">
+                 </div>
+                 <!-- The breadcrumb search button -->
+                 <div id="searchDiv" class="searchDiv" region="top">
+                     <button id="searchButton" type="button"></button>
+                 </div>
+             </div>
+        </div>
+         
+        <!-- The rest of the java batch tool -->
+        
+        <!-- Any views are attached here -->
+  	  	<div data-dojo-type="dijit.layout.StackContainer" id="breadcrumbContainer-id" doLayout="false" style="overflow: auto;">
+			<div id="loadingView" data-dojo-type="dijit.layout.ContentPane" style="height: 100%; width: 100%;">
+				<div id="loadingViewStandBy" style="height: 100%; width: 100%;"></div>
+			</div>
+		</div>
+        
+     </div>
+   </div>
+
+</body>
+
+
+</html>

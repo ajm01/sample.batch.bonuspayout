@@ -1,0 +1,115 @@
+<server description="Server for AdminCenter/JBatch Admin">
+
+    <!-- Enable features -->
+    <featureManager>
+        <feature>batchManagement-1.0</feature>
+        <feature>localConnector-1.0</feature>
+        <feature>appSecurity-2.0</feature>
+        <feature>mpConfig-1.4</feature>
+        <feature>mpHealth-2.2</feature>
+
+        <!-- This sample can work without CDI configured, but the use of CDI is always strongly encouraged with batch. -->
+        <feature>cdi-2.0</feature>
+        <feature>jaxrs-2.1</feature>
+        <feature>jpa-2.2</feature>
+
+        <!-- Admin Center Java Batch tool, currently part of WebSphere Liberty only --> 
+          <feature>adminCenter-1.0</feature>
+        <!-- Use for validation URLs like: https://localhost:9443/ibm/api/validation/dataSource/batchDB -->
+        <feature>restConnector-2.0</feature>
+        <feature>ejbLite-3.2</feature>
+    </featureManager>
+
+    <remoteFileAccess>
+       <writeDir>${server.config.dir}</writeDir>
+    </remoteFileAccess>
+
+    <variable name="db_xml" defaultValue="postgresql.xml"/>
+    <include location="${db_xml}" optional="true"/>
+
+    <variable name="autoStartBatch" value="false"/>
+<!--    <variable name="defaultHostName" value=${HOSTNAME}/> -->
+
+<!-- A user of the Admin Center Java Batch tool must ALSO be an administrator.  This is independent of whatever batch roles,
+     "batchAdmin", "batchSubmitter", etc. are mapped to this user. 
+     Leave this commented out for now -->
+    <administrator-role>
+      <user>bob</user>
+   </administrator-role>
+
+    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+
+    <library id="DerbyLib">
+        <fileset dir="${shared.resource.dir}" includes="derby*jar"/>
+    </library>
+
+    <jdbcDriver id="postgresql-driver"
+                javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"
+                javax.sql.ConnectionPoolDataSource="org.postgresql.ds.PGConnectionPoolDataSource"
+                javax.sql.DataSource="org.postgresql.ds.PGPoolingDataSource">
+		<library>
+			<fileset dir="${shared.resource.dir}" includes="postgresql*jar"/>
+		</library>
+    </jdbcDriver>
+
+    <logging traceSpecification="BonusPayout=finer:com.ibm.ws.batch.JobLogger=finest:com.ibm.jbatch.container.services.impl.*=all:com.ibm.ws.jbatch.*=fine:RRA=fine"/>
+    <!--
+         Debug batch runtime: -->
+    <logging traceSpecification="BonusPayout=all=enabled:com.ibm.jbatch.*=all:com.ibm.ws.jbatch.*=all"/>
+         Debug batch runtime and JDBC:
+    <logging traceSpecification="BonusPayout=all=enabled:com.ibm.jbatch.*=all:com.ibm.ws.jbatch.*=all:RRA=all:WAS.j2c=all"/>
+
+
+    <databaseStore dataSourceRef="batchDB" id="BatchDatabaseStore" schema="test" tablePrefix="AB">
+        <persistenceProperties eclipselink.logging.level="FINER" javax.persistence.schema-generation.create-database-schemas="true"/>
+    </databaseStore>
+
+    <batchPersistence jobStoreRef="BatchDatabaseStore"/>
+
+    <!-- For WDT -->
+    <!--
+    <applicationMonitor updateTrigger="mbean"/>
+    -->
+
+    <keyStore id="defaultKeyStore" password="Liberty"/>
+
+    <basicRegistry id="basic" realm="ibm/api">
+        <user name="bob" password="bobpwd"/>
+        <user name="jane" password="janepwd"/>
+        <user name="sam" password="sampwd"/>
+        <user name="admin" password="adminpwd" />
+        <user name="reader" password="readerpwd" />
+    </basicRegistry>
+
+    <authorization-roles id="com.ibm.ws.batch">
+        <security-role name="batchAdmin">
+            <user name="bob"/>
+        </security-role>
+        <security-role name="batchAdmin">
+            <user name="jane"/>
+        </security-role>
+        <security-role name="batchSubmitter">
+            <user name="sam"/>
+        </security-role>
+    </authorization-roles>
+
+    <!-- Used in startup bean -->
+    <!--  -->
+    <application id="batch-bonuspayout-application" location="batch-bonuspayout-application.war" name="batch-bonuspayout-application" type="war">
+        <application-bnd>
+            <security-role name="JOBSTARTER">
+                <user name="sam" />
+                <run-as userid="sam" password="sampwd"/>
+            </security-role>
+        </application-bnd>
+    </application>
+
+   <!-- A user with the administrator-role has full access to the Admin Center -->
+   <administrator-role>
+      <user>admin</user>
+   </administrator-role>
+   <!-- A user with the reader-role has read-only access to the Admin Center -->
+   <reader-role>
+      <user>reader</user>
+   </reader-role>
+</server>

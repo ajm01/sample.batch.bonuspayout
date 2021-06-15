@@ -34,7 +34,7 @@ spec:
        command:
        - /bin/sh
        - -c
-       - python3 /scripts/batchframework.py
+       - python3 /scripts/batchframework.py /batchprops/runToCompletionParms.txt
      dnsPolicy: ClusterFirst
      restartPolicy: Never
      shareProcessNamespace: true

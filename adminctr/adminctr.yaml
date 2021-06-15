@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adminctr-deployment
+  labels:
+    app: adminctr 
+spec:
+  selector:
+    matchLabels:
+      app: adminctr 
+  template:
+    metadata:
+      labels:
+        app: adminctr 
+    spec:
+      containers:
+      - name: adminctr-container
+        image: ajymau/adminctr:dev-last
+        envFrom:
+        - secretRef:
+            name: bp-database-secret  
+        imagePullPolicy: Always 
+        ports:
+        - containerPort: 9080
+        - containerPort: 9443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: adminctr-service
+spec:
+  selector:
+    app: adminctr 
+  ports:
+  - protocol: TCP
+    port: 80
+    name: http
+    targetPort: 9080
+  - protocol: TCP
+    port: 443
+    name: https
+    targetPort: 9443
+#---
+#apiVersion: v1
+#kind: Route
+#metadata:
+#  name: adminctr-route
+#spec:
+#  to:
+#    kind: Service
+#    name: adminctr-service

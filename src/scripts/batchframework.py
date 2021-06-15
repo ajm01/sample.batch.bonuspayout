@@ -5,6 +5,8 @@ import sys, os, signal
 import os.path
 from os import path
 
+batchprop = "need to pass in via job yaml"
+
 def timedOut():
     print("Did not find the liberty server start success message in the alloted time...exiting")
     #sys.exit()
@@ -74,6 +76,8 @@ def searchLogForString(messageID):
                 break
 
 def submitBatchJob():
+    batchproparg = '--jobPropertiesFile=' + batchprop
+    print("AJM: batchproparg = " + batchproparg)
     #hostname =os.environ['POSTGRES_HOSTNAME']
     #print(f'hostname is {hostname}')
     #subprocess.run(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait'])
@@ -81,7 +85,7 @@ def submitBatchJob():
     # failure batch submission - need to parameterize this
     #, '--jobPropertiesFile=/batchprops/forceFailureParms.txt'
 	#, '--jobPropertiesFile=/batchprops/lotsOfRecords.txt'
-    process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait', '--jobPropertiesFile=/batchprops/runToCompletionParms.txt'],
+    process = subprocess.Popen(['/opt/ol/wlp/bin/batchManager', 'submit', '--trustSslCertificates','--batchManager=localhost:9443', '--user=bob', '--password=bobpwd', '--pollingInterval_s=2', '--applicationName=batch-bonuspayout-application', '--jobXMLName=BonusPayoutJob', '--wait', batchproparg],
                                stderr=subprocess.PIPE, 
                                stdout=subprocess.PIPE)
 
@@ -96,6 +100,29 @@ def submitBatchJob():
 
 #startServer()
 
+def displayArgs():
+    # total arguments
+    n = len(sys.argv)
+    print("Total arguments passed:", n)
+ 
+    # Arguments passed
+    print("\nName of Python script:", sys.argv[0])
+ 
+    print("\nArguments passed:", end = " ")
+    for i in range(1, n):
+        print(sys.argv[i], end = " ")
+        if (i == 1):
+            batchprop = sys.argv[i]
+            print("AJM: in if, batchprops = " + batchprop)
+        else:
+            batchprop = "/batchprops/runToCompletionParms.txt"
+            print("AJM: in else, batchprops = " + batchprop)
+    print("AJM: in proc, batchprop = " + batchprop)
+    return batchprop
+    
+batchprop = displayArgs()
+print("AJM: after proc, batchprop = " + batchprop)
+
 # let the liberty server init and create the log file to be scanned - 30 seconds is supper generous
 print("AJM: sleep 30 seconds")
 time.sleep(30)
@@ -104,18 +131,20 @@ searchLogForString("CWWKF0011I")
 print("AJM: gonna submit the batch job")
 
 rc = submitBatchJob()
+
 #print("AJM: sleep 300 seconds")
 #time.sleep(300)
+
 print ("AJM: return code from batchJob =  ", rc)
 if (rc == 35):
     print("AJM: Batch job submission completed successfully...exiting")
     rc = 0
-    #stopServer()
+    stopServer()
     # we want the script to exit with success, reflecting the batch job being successful, no need to set a rc here.
 else:
     #print("AJM: Batch Job submission not successful - RC = ", rc)
 #    print("AJM: shutting down server, exiting abnormally with rc! = ", rc)
     print("AJM: consider restarting job")
-    #stopServer()
+    stopServer()
 
 sys.exit(rc)

@@ -75,7 +75,7 @@
 	<batchJmsDispatcher connectionFactoryRef="batchConnectionFactory"
 						queueRef="batchJobSubmissionQueue"/>
 	<jmsConnectionFactory id="batchConnectionFactory" jndiName="jms/batch/connectionFactory">
-		<properties.wasJms remoteServerAddress="localhost:${bvt.prop.jms.1}:BootstrapBasicMessaging"/>	
+		<properties.wasJms remoteServerAddress="localhost:7276:BootstrapBasicMessaging"/>	
 	</jmsConnectionFactory>
 	<jmsQueue id="batchJobSubmissionQueue" >
 		<properties.wasJms deliveryMode="Persistent" queueName="batchLibertyQueue" readAhead="AsConnection" timeToLive="0"></properties.wasJms>
@@ -117,7 +117,9 @@
 
     <!-- Used in startup bean -->
     <!--  -->
-    <application id="batch-bonuspayout-application" location="batch-bonuspayout-application.war" name="batch-bonuspayout-application" type="war">
+    <application id="batch-bonuspayout-application" 
+location="BonusPayout.war" 
+name="batch-bonuspayout-application" type="war">
         <application-bnd>
             <security-role name="JOBSTARTER">
                 <user name="sam" />

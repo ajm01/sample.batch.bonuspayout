@@ -125,15 +125,15 @@ print("AJM: after proc, batchprop = " + batchprop)
 
 # let the liberty server init and create the log file to be scanned - 30 seconds is supper generous
 print("AJM: sleep 30 seconds")
-time.sleep(30)
-searchLogForString("CWWKF0011I")
+time.sleep(120)
+#searchLogForString("CWWKF0011I")
 #searchLogForString("CWPKI0803A")
 print("AJM: gonna submit the batch job")
 
 rc = submitBatchJob()
 
-#print("AJM: sleep 300 seconds")
-#time.sleep(300)
+print("AJM: sleep 300 seconds")
+time.sleep(120)
 
 print ("AJM: return code from batchJob =  ", rc)
 if (rc == 35):

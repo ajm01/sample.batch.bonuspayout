@@ -35,7 +35,7 @@
    </administrator-role>
 
     <httpEndpoint host="*" 
-httpPort="9080" httpsPort="9443" 
+httpPort="-1" httpsPort="-1" 
 id="defaultHttpEndpoint"/>
 
     <library id="DerbyLib">
@@ -51,13 +51,20 @@ id="defaultHttpEndpoint"/>
 		</library>
     </jdbcDriver>
 
-    <logging traceSpecification="BonusPayout=finer:com.ibm.ws.batch.JobLogger=finest:com.ibm.jbatch.container.services.impl.*=all:com.ibm.ws.jbatch.*=fine:RRA=fine"/>
-    <!--
-         Debug batch runtime: -->
+    <logging 
+traceSpecification="BonusPayout=all=enabled:com.ibm.jbatch.*=all:com.ibm.ws.jbatch.*=all"
+/>
+    
+    
+<!--
+    <logging traceSpecification="BonusPayout=finer:com.ibm.ws.batch.JobLogger=finest:com.ibm.jbatch.container.services.impl.*=all:com.ibm.ws.jbatch.*=fine:RRA=fine"/> -->
+    
+<!--
+         Debug batch runtime:
     <logging traceSpecification="BonusPayout=all=enabled:com.ibm.jbatch.*=all:com.ibm.ws.jbatch.*=all"/>
          Debug batch runtime and JDBC:
     <logging traceSpecification="BonusPayout=all=enabled:com.ibm.jbatch.*=all:com.ibm.ws.jbatch.*=all:RRA=all:WAS.j2c=all"/>
-
+    --> 
 
     <databaseStore dataSourceRef="batchDB" id="BatchDatabaseStore" schema="test" tablePrefix="AB">
         <persistenceProperties eclipselink.logging.level="FINER" javax.persistence.schema-generation.create-database-schemas="true"/>
@@ -89,7 +96,11 @@ id="defaultHttpEndpoint"/>
 		<properties.wasJms remoteServerAddress="localhost:7276:BootstrapBasicMessaging" />
 	</jmsConnectionFactory>
 
-    <keyStore id="defaultKeyStore" password="Liberty"/>
+    
+<batchJmsExecutor activationSpecRef="batchActivationSpec" queueRef="batchJobSubmissionQueue" replyConnectionFactoryRef="batchConnectionFactory" />
+
+    
+<keyStore id="defaultKeyStore" password="Liberty"/>
 
     <basicRegistry id="basic" realm="ibm/api">
         <user name="bob" password="bobpwd"/>

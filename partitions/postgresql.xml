@@ -5,12 +5,16 @@
     </dataSource>
  
     <!--  In this sample we'll use the same database (as the runtime DB) but use a different DS to access it. -->
-    <dataSource id="appDB" jndiName="jdbc/batch" type="javax.sql.XADataSource" jdbcDriverRef="postgresql-driver">
+    <dataSource id="appDB" 
+jndiName="jdbc/BonusPayoutDS" 
+type="javax.sql.XADataSource" jdbcDriverRef="postgresql-driver">
         <properties serverName="${POSTGRES_HOSTNAME}" portNumber="${POSTGRES_PORT}" user="${POSTGRES_USER}" password="${POSTGRES_PASSWORD}" databaseName="${POSTGRES_DB}"/>
     </dataSource>
 
     <!--  In this sample we'll use the same database (as the runtime DB) but use a different DS to access it. -->
-    <dataSource id="appDBNonJta" jndiName="jdbc/batchNonJta" type="javax.sql.ConnectionPoolDataSource" jdbcDriverRef="postgresql-driver" transactional="false">
+    <dataSource id="appDBNonJta" 
+jndiName="jdbc/BonusPayoutNonJta" 
+type="javax.sql.ConnectionPoolDataSource" jdbcDriverRef="postgresql-driver" transactional="false">
         <properties serverName="${POSTGRES_HOSTNAME}" portNumber="${POSTGRES_PORT}" user="${POSTGRES_USER}" password="${POSTGRES_PASSWORD}" databaseName="${POSTGRES_DB}"/>
     </dataSource>
 

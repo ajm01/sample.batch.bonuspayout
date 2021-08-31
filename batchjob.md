@@ -1,53 +1,153 @@
-# Install the PostgreSQL Operator
+## Installation and Configuration of the minikube environment
+<b>Please Note:</b> The guide only works with minikube configured with kubernetes 1.19.x or lower. odo link cannot link services successfully in a Kubernetes 1.20.x or higher environment as of this writing.
 
-## Create a namespace to contain both the PostgreSQL Operator and the application that will make use of it:
+It is recommended tothat users of this guide obtain a suitable system for running minikube with kubernetes. In practice this should be a 4 core system minimum. Before proceeding to the sample application, please follow the instructions for establishing a minikube environment:
 
+### Install and start docker 
+Please follow instructions [here](https://docs.docker.com/engine/install/) for your OS distribution.
+
+### Install and start and configure minikube
+
+#### <u>Install minikube</u>
+Follow minikube installation instructions [here](https://minikube.sigs.k8s.io/docs/start/) for your operating system target.
+
+#### <u>Start minikube</u>
+If running as root, minikube will complain that docker should not be run as root as a matter of practice and will abort start up. To proceed, minikube will need to be started in a manner which will override this protection:
 ```shell
-odo project create jbatch-demo
+> minikube start --force --driver=docker --kubernetes-version=v1.19.8
 ```
 
-## Access your Openshift Console and install the Dev4Devs PostgreSQL Operator from the Operator Hub:
+If you are a non-root user, start minikube as normal (will utilize docker by default):
+```shell
+> minikube start --kubernetes-version=v1.19.8
+```
+#### <u>Configure minikube</u>
+ingress config:<br>
+The application requires an ingress addon to allow for routes to be created easily. Configure minikube for ingress by adding ingress as a minikube addon:
+```shell
+> minikube addons enable ingress
+```
+Note: It is possible that you may face the dockerhub pull rate limit if you do not have a pull secret for your personal free docker hub account in place. During ingress initialization two of the job pods used by ingress may fail to initialize due to pull rate limits. If this happens, and ingress fails to enable, you will have to add a secret for the pulls for the following service accounts:
 
-PostgreSQL Operator as shown in OperatorHub
+- ingress-nginx-admission
+- ingress-nginx
 
-NOTE: Install operator into the "jbatch-demo" namespace created above
+to add a pull secret for these service accounts: <br>
+- switch to the kube-system context:
+```shell
+> kubectl config set-context --current --namespace=kube-system
+```
+- create a pull secret:
+```shell
+> kubectl create secret docker-registry regcred --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
+```
+~~~
+        where:
+          - <your-registry-server> is the DockerHub Registry FQDN. (https://index.docker.io/v1/)
+          - <your-name> is your Docker username.
+          - <your-pword> is your Docker password.
+          - <your-email> is your Docker email.
+~~~
 
-## Create a database using odo via the Dev4Devs PostgreSQL Database Operator: 
+- add this new cred ('regcred' in the example above) to the default service account in minikube:
+```shell
+> kubectl patch serviceaccount ingress-nginx-admission -p '{"imagePullSecrets": [{"name": "regcred"}]}'
+> kubectl patch serviceaccount ingress-nginx -p '{"imagePullSecrets": [{"name": "regcred"}]}'
+```
 
->What is odo?
+ Default Service Account Pull Secret patch:<br>
+ Much like the ingress service accounts, the default service account will need to be patched with a pull secret configured for your personal docker account. 
 
-> odo is a CLI tool for creating applications on OpenShift and Kubernetes. odo allows developers to concentrate on creating applications without the need to administer a cluster itself. Creating deployment configurations, build configurations, service routes and other OpenShift or Kubernetes elements are all automated by odo.
->
-> Before proceeding, please [install the latest odo CLI](https://odo.dev/docs/installing-odo/) 
+ - switch to th edefault context:
+ ```shell
+ > kubectl config set-context --current --namespace=default
+```
+
+ - create the same docker-registry secret configured for your docker , now for the default minikube context:
+ ```shell
+ > kubectl create secret docker-registry regcred --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
+ ```
+
+
+~~~
+        where:
+          - <your-registry-server> is the DockerHub Registry FQDN. (https://index.docker.io/v1/)
+          - <your-name> is your Docker username.
+          - <your-pword> is your Docker password.
+          - <your-email> is your Docker email.
+~~~
+
+- Add this new cred ('regcred' in the example above) to the default service account in minikube:
+```shell
+> kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}'
+```
+Kubernetes Dashboard graphical UI config:<br>
+ It is helpful to make use of the basic kubernetes dashboard UI to interact with the various kubernetes entities in a graphical way. Please refer to the directions [here](https://minikube.sigs.k8s.io/docs/handbook/dashboard/) for enabling and starting the dashboard. Please note, this require the installation of and access to a desktop environment in order to make use of the dashboard. (GNOME + xrdb for example)
+
+Operator Lifecycle Manager (OLM) config:
+Enabling OLM on your minikube instance simplifies installation and upgrades of Operators available from [OperatorHub](https://operatorhub.io). Enable OLM with below command:
+```shell
+> minikube addons enable olm
+```
+
+### Install odo
+Please follow odo installation instructions [here](https://odo.dev/docs/installing-odo/) for your OS distribution.
+
+## What is odo?
+
+odo is a CLI tool for creating applications and interacting with OpenShift and Kubernetes (minikube). odo allows developers to concentrate on creating applications without the need to administer a cluster itself. Creating deployment configurations, build configurations, service routes and other OpenShift or Kubernetes elements are all automated by odo.
+In this doc, we are using odo to simply create a database service in our minikube cluster.
+
+### Cluster Admin
+
+The cluster admin needs to install 2 Operators into the cluster:
+
+* Service Binding Operator
+* A Backing Service Operator
+
+A Backing Service Operator that is "bind-able," in other
+words a Backing Service Operator that exposes binding information in secrets, config maps, status, and/or spec
+attributes. The Backing Service Operator may represent a database or other services required by
+applications. We'll use Dev4Devs PostgreSQL Operator found in the OperatorHub to
+demonstrate a sample use case.
+
+#### Install the Service Binding Operator
+
+Below `kubectl` command will make the Service Binding Operator available in all namespaces on your minikube:
+```shell
+> kubectl create -f https://operatorhub.io/install/service-binding-operator.yaml
+```
+#### Install the DB operator
+
+Below `kubectl` command will make the PostgreSQL Operator available in `my-postgresql-operator-dev4devs-com` namespace of your minikube cluster:
+```shell
+> kubectl create -f https://operatorhub.io/install/postgresql-operator-dev4devs-com.yaml
+```
+**NOTE**: This Operator will be installed in the "my-postgresql-operator-dev4devs-com" namespace and will be usable from this namespace only.
+#### <i>Create a database to be used by the sample application</i>
+Since the PostgreSQL Operator we installed in above step is available only in `my-postgresql-operator-dev4devs-com` namespace, let's first make sure that odo uses this namespace to perform any tasks:
+```shell
+> odo project set my-postgresql-operator-dev4devs-com
+```
 
 We can use the default configurations of the PostgreSQL Operator to start a Postgres database from it. But since our app uses few specific configuration values, lets make sure they are properly populated in the databse service we start.
 
-First, login into your cluster using the oc login command.
-
-Attach odo to the current project/namespace
-```shell
-> odo set project jbatch-demo
-```
-
-Store the YAML of the service in a file:
-
+First, store the YAML of the service in a file:
 ```shell
 > odo service create postgresql-operator.v0.1.1/Database --dry-run > db.yaml
 ```
-Now, in the db.yaml file, modify the following values (these values already exist, we simply need to change them) under the spec: section of the YAML file:
-
+Now, in the `db.yaml` file, modify the following values (these values already exist, we simply need to change them) under `spec:` section of the YAML file:
 ```yaml
   databaseName: "sampledb"
   databasePassword: "samplepwd"
   databaseUser: "sampleuser"
 ```
-Now, using odo, create the database from above YAML file:
 
+Now, using odo, create the database from above YAML file:
 ```shell
 > odo service create --from-file db.yaml
 ```
-
-This action will create a database instance pod in the service-binding-demo namespace. The bonuspayout application will be configured to use this database.
+This action will create a database instance pod in the `my-postgresql-operator-dev4devs-com` namespace.
 
 # Configure the PostgreSQL Server
 

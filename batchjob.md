@@ -5,6 +5,7 @@ It is recommended tothat users of this guide obtain a suitable system for runnin
 
 ### Install and start docker 
 Please follow instructions [here](https://docs.docker.com/engine/install/) for your OS distribution.
+I have actually found these instructions for RHEL install [here](https://www.linuxtechi.com/install-docker-ce-centos-8-rhel-8/) the most useful - docker not well supported on RHEL
 
 ### Install and start and configure minikube
 
@@ -21,6 +22,9 @@ If you are a non-root user, start minikube as normal (will utilize docker by def
 ```shell
 > minikube start --kubernetes-version=v1.19.8
 ```
+#### <u>Install `kubectl`</u>
+Install the kubernetes command line tool kubectl if not already present on the system. Follow instructions found [here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/) for your operating system.
+        
 #### <u>Configure minikube</u>
 ingress config:<br>
 The application requires an ingress addon to allow for routes to be created easily. Configure minikube for ingress by adding ingress as a minikube addon:
@@ -91,7 +95,7 @@ Enabling OLM on your minikube instance simplifies installation and upgrades of O
 ```
 
 ### Install odo
-Please follow odo installation instructions [here](https://odo.dev/docs/installing-odo/) for your OS distribution.
+Please follow odo installation instructions [here](https://odo.dev/docs/getting-started/installation) for your OS distribution.
 
 ## What is odo?
 
@@ -113,10 +117,8 @@ demonstrate a sample use case.
 
 #### Install the Service Binding Operator
 
-Below `kubectl` command will make the Service Binding Operator available in all namespaces on your minikube:
-```shell
-> kubectl create -f https://operatorhub.io/install/service-binding-operator.yaml
-```
+Follow the instructions after clicking on the 'Install' button fowund [here](https://operatorhub.io/operator/service-binding-operator)
+
 #### Install the DB operator
 
 Below `kubectl` command will make the PostgreSQL Operator available in `my-postgresql-operator-dev4devs-com` namespace of your minikube cluster:
@@ -129,10 +131,17 @@ Since the PostgreSQL Operator we installed in above step is available only in `m
 ```shell
 > odo project set my-postgresql-operator-dev4devs-com
 ```
+Create an odo project from which we will set up and configure the database instance:
+```shell
+>odo create java-openliberty jbatch-proto
+>odo push
+```
+odo will create a working project in the minicube cluster after which we can configure and create the database instance
 
+##### Database creation
 We can use the default configurations of the PostgreSQL Operator to start a Postgres database from it. But since our app uses few specific configuration values, lets make sure they are properly populated in the databse service we start.
 
-First, store the YAML of the service in a file:
+First, store the YAML of the database service in a file:
 ```shell
 > odo service create postgresql-operator.v0.1.1/Database --dry-run > db.yaml
 ```
@@ -148,6 +157,11 @@ Now, using odo, create the database from above YAML file:
 > odo service create --from-file db.yaml
 ```
 This action will create a database instance pod in the `my-postgresql-operator-dev4devs-com` namespace.
+
+Once the service create is complete, issue a push to cause the db pod to start:
+```shell
+>odo push
+```
 
 # Configure the PostgreSQL Server
 
@@ -177,7 +191,7 @@ pg_ctl restart -D /var/lib/pgsql/data/userdata
 You will be creating a kubernetes secret to contain the db connection information that will be made available to the application at startup time in the form of env vars. The two pieces of data that remain to be obtained is the postgresql server address and port. To find the address issue:
 
 ```shell
-> oc get all
+> kubectl get all
 ```
 you will see a section of the results containing IP addresses for th evarious pods in your current namespace:
 
@@ -231,7 +245,7 @@ The batch job yaml file has been configured to reference the secret which makes 
 
 ### Submit the Job itself:
 ```shell
-kubectl create -f ./batchjob.yaml
+kubectl create -f ./batchjobmulti2.yaml
 ```
 
 This will pull the latest image containing the bonuspayout app and the script that will start the server, submit the job and then stop the server. The Job itself will run the script.
